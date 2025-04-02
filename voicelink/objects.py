@@ -52,6 +52,7 @@ class Track:
         "uri",
         "source",
         "spotify",
+        "applemusic",
         "artist_id",
         "original",
         "_search_type",
@@ -84,6 +85,9 @@ class Track:
         self.uri: str = info.get("uri", "https://discord.com/application-directory/605618911471468554")
         self.source: str = info.get("sourceName", extract(self.uri).domain)
         self.spotify: bool = self.source == "spotify"
+        self.applemusic: bool = self.source == "applemusic"
+        if self.applemusic:
+            self.artist_id: Optional[list] = info.get("artist_id")
         if self.spotify:
             self.artist_id: Optional[list] = info.get("artist_id")
 

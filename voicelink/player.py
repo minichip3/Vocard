@@ -513,16 +513,16 @@ class Player(VoiceProtocol):
             return track
 
         if track.spotify:
-            if not track.original:
-                search_results = await self._node.get_tracks(f"ytmsearch:{track.author} - {track.title}", requester=track.requester)
-                if not search_results:
-                    raise TrackLoadError("Can't find a playable source!")
-                track.original = search_results[0]
-
-        data = {
-            "encodedTrack": track.original.track_id if track.original else track.track_id,
-            "position": str(start if start else track.position)
-        }
+            # Use the Spotify URL directly as the identifier
+            data = {
+                "identifier": track.uri,
+                "position": str(start if start else track.position)
+            }
+        else:
+            data = {
+                "encodedTrack": track.original.track_id if track.original else track.track_id,
+                "position": str(start if start else track.position)
+            }
 
         if end or track.end_time:
             data["endTime"] = str(end if end else track.end_time)
