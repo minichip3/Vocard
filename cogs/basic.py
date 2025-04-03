@@ -48,7 +48,7 @@ searchPlatform = {
     "youtube": "ytsearch",
     "youtubemusic": "ytmsearch",
     "soundcloud": "scsearch",
-    "apple": "amsearch",
+    "applemusic": "amsearch",
 }
 
 async def nowplay(ctx: commands.Context, player: voicelink.Player):
@@ -213,7 +213,7 @@ class Basic(commands.Cog):
         app_commands.Choice(name="Youtube Music", value="YoutubeMusic"),
         app_commands.Choice(name="Spotify", value="Spotify"),
         app_commands.Choice(name="SoundCloud", value="SoundCloud"),
-        app_commands.Choice(name="Apple Music", value="Apple")
+        app_commands.Choice(name="Apple Music", value="AppleMusic")
     ])
     @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
     async def search(self, ctx: commands.Context, *, query: str, platform: str = "Youtube"):
