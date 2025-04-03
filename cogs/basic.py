@@ -871,7 +871,7 @@ class Basic(commands.Cog):
         embed.add_field(
             name=value[0],
             value=value[1].format(
-                "0", "0", self.bot.latency, '😭' if self.bot.latency > 5 else ('😨' if self.bot.latency > 1 else '👌'), "St Louis, MO, United States"
+                "0", "0", self.bot.latency, '😭' if self.bot.latency > 5 else ('😨' if self.bot.latency > 1 else '👌'), "Gwangju, South Korea"
         ))
 
         if player:
