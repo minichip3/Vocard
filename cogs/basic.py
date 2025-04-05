@@ -47,6 +47,7 @@ from validators import url
 searchPlatform = {
     "youtube": "ytsearch",
     "youtubemusic": "ytmsearch",
+    "spotify": "spsearch",
     "soundcloud": "scsearch",
     "applemusic": "amsearch",
 }
@@ -106,7 +107,6 @@ class Basic(commands.Cog):
         node = voicelink.NodePool.get_node()
         if node and node.spotify_client:
             try:
-                tracks: list[voicelink.Track] = await node.spotifySearch(current, requester=interaction.user)
                 return [app_commands.Choice(name=truncate_string(f"🎵 {track.author} - {track.title}", 100), value=truncate_string(f"{track.author} - {track.title}", 100)) for track in tracks]
             except voicelink.TrackLoadError:
                 return []
@@ -229,11 +229,8 @@ class Basic(commands.Cog):
             return await send(ctx, "noLinkSupport", ephemeral=True)
 
         platform = platform.lower()
-        if platform != 'spotify':
-            query_platform = searchPlatform.get(platform, 'ytsearch') + f":{query}"
-            tracks = await player.get_tracks(query=query_platform, requester=ctx.author)
-        else:
-            tracks = await player.node.spotifySearch(query=query, requester=ctx.author)
+        query_platform = searchPlatform.get(platform, 'ytsearch') + f":{query}"
+        tracks = await player.get_tracks(query=query_platform, requester=ctx.author)
 
         if not tracks:
             return await send(ctx, "noTrackFound")

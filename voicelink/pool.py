@@ -380,50 +380,8 @@ class Node:
            Context object on any track you search.
         """
 
-        if not URL_REGEX.match(query) and not re.match(r"(?:ytm?|sc|am)search:.", query):
+        if not URL_REGEX.match(query) and not re.match(r"(?:ytm?|sp|sc|am)search:.", query):
             query = f"{search_type}:{query}"
-
-        if SPOTIFY_URL_REGEX.match(query):
-            try:
-                if not self.spotify_client:
-                    raise InvalidSpotifyClientAuthorization(
-                    "You did not provide proper Spotify client authorization credentials. "
-                    "If you would like to use the Spotify searching feature, "
-                    "please obtain Spotify API credentials here: https://developer.spotify.com/"
-                )
-
-                spotify_results = await self.spotify_client.search(query=query)
-            except Exception as _:
-                raise TrackLoadError("Not able to find the provided Spotify entity, is it private?")
-                
-            if isinstance(spotify_results, spotify.Track):
-                return [
-                    Track(
-                        track_id=None,
-                        info=spotify_results.to_dict(),
-                        requester=requester,
-                        search_type=search_type,
-                        spotify_track=spotify_results,
-                    )
-                ]
-
-            tracks = [
-                Track(
-                    track_id=None,
-                    info=track.to_dict(),
-                    requester=requester,
-                    search_type=search_type,
-                    spotify_track=track,
-                ) for track in spotify_results.tracks if track.uri
-            ]
-
-            return Playlist(
-                playlist_info={"name": spotify_results.name, "selectedTrack": 0},
-                tracks=tracks,
-                requester=requester,
-                spotify=True,
-                spotify_playlist=spotify_results
-            )
 
         elif DISCORD_MP3_URL_REGEX.match(query):
             async with self._session.get(
